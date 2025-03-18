@@ -23,7 +23,7 @@ LangManus is a community-driven AI automation framework that builds upon the inc
 
 ### Prerequisites
 
-- [LangManus](https://github.com/langmanus/langmanus)
+- **‼️ [LangManus](https://github.com/langmanus/langmanus) as the server**.
 - Node.js (v22.14.0+)
 - pnpm (v10.6.2+) as package manager
 
