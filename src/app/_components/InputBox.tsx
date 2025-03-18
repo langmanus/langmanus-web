@@ -1,5 +1,5 @@
 import { ArrowUpOutlined, GlobalOutlined } from "@ant-design/icons";
-import { type KeyboardEvent, useCallback, useEffect, useState } from "react";
+import { type KeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
 
 import { Atom } from "~/core/icons";
 import { cn } from "~/core/utils";
@@ -24,6 +24,28 @@ export function InputBox({
   const [deepThinkingMode, setDeepThinkMode] = useState(false);
   const [searchBeforePlanning, setSearchBeforePlanning] = useState(false);
   const [imeStatus, setImeStatus] = useState<"active" | "inactive">("inactive");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto adjust height function
+  const adjustHeight = useCallback(() => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+    
+    // Reset height to auto to get the correct scrollHeight
+    textarea.style.height = 'auto';
+    
+    // Calculate new height (capped at ~5 lines)
+    const maxHeight = size === "large" ? 256 : 128; // 32px * 8 for large, 32px * 4 for normal
+    const newHeight = Math.min(textarea.scrollHeight, maxHeight);
+    
+    textarea.style.height = `${newHeight}px`;
+  }, [size]);
+
+  // Adjust height on content change
+  useEffect(() => {
+    adjustHeight();
+  }, [message, adjustHeight]);
+
   const saveConfig = useCallback(() => {
     localStorage.setItem(
       "langmanus.config.inputbox",
@@ -83,9 +105,12 @@ export function InputBox({
     <div className={cn(className)}>
       <div className="w-full">
         <textarea
+          ref={textareaRef}
           className={cn(
-            "m-0 w-full resize-none border-none px-4 py-3 text-lg",
+            "m-0 w-full resize-none border-none px-4 py-3 text-lg transition-[height] duration-200 ease-in-out",
             size === "large" ? "min-h-32" : "min-h-4",
+            "max-h-[128px] overflow-y-auto",
+            size === "large" && "max-h-[256px]"
           )}
           placeholder="What can I do for you?"
           value={message}
