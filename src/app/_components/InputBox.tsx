@@ -127,10 +127,10 @@ export function InputBox({
       </div>
       <div className="flex items-center px-4 py-2">
         <div className="flex grow items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Tooltip>
-                <TooltipTrigger asChild>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline"
                     className={cn("rounded-2xl px-4 text-sm", {
@@ -140,44 +140,43 @@ export function InputBox({
                   >
                     <RobotOutlined className="h-4 w-4" />
                   </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Enable or disable agents</p>
-                </TooltipContent>
-              </Tooltip>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>Agents</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {teamMembers.map((member) => (
-                <Tooltip key={member.name}>
-                  <TooltipTrigger asChild>
-                    <DropdownMenuCheckboxItem
-                      key={member.name}
-                      disabled={!member.is_optional}
-                      checked={enabledTeamMembers.includes(member.name)}
-                      onCheckedChange={() => {
-                        setEnabledTeamMembers(
-                          enabledTeamMembers.includes(member.name)
-                            ? enabledTeamMembers.filter(
-                                (name) => name !== member.name,
-                              )
-                            : [...enabledTeamMembers, member.name],
-                        );
-                      }}
-                    >
-                      {member.name.charAt(0).toUpperCase() +
-                        member.name.slice(1)}
-                    </DropdownMenuCheckboxItem>
-                  </TooltipTrigger>
-                  <TooltipContent side="right">
-                    <p>{member.desc}</p>
-                  </TooltipContent>
-                </Tooltip>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuLabel>Agents</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {teamMembers.map((member) => (
+                    <Tooltip key={member.name}>
+                      <TooltipTrigger asChild>
+                        <DropdownMenuCheckboxItem
+                          key={member.name}
+                          disabled={!member.is_optional}
+                          checked={enabledTeamMembers.includes(member.name)}
+                          onCheckedChange={() => {
+                            setEnabledTeamMembers(
+                              enabledTeamMembers.includes(member.name)
+                                ? enabledTeamMembers.filter(
+                                    (name) => name !== member.name,
+                                  )
+                                : [...enabledTeamMembers, member.name],
+                            );
+                          }}
+                        >
+                          {member.name.charAt(0).toUpperCase() +
+                            member.name.slice(1)}
+                        </DropdownMenuCheckboxItem>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        <p>{member.desc}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Enable or disable agents</p>
+            </TooltipContent>
+          </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
