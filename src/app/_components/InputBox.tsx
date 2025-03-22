@@ -128,9 +128,9 @@ export function InputBox({
       <div className="flex items-center px-4 py-2">
         <div className="flex grow items-center gap-2">
           <Tooltip>
-            <TooltipTrigger asChild>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <TooltipTrigger asChild>
                   <Button
                     variant="outline"
                     className={cn("rounded-2xl px-4 text-sm", {
@@ -140,44 +140,44 @@ export function InputBox({
                   >
                     <RobotOutlined className="h-4 w-4" />
                   </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56">
-                  <DropdownMenuLabel>Agents</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  {teamMembers.map((member) => (
-                    <Tooltip key={member.name}>
-                      <TooltipTrigger asChild>
-                        <DropdownMenuCheckboxItem
-                          key={member.name}
-                          disabled={!member.is_optional}
-                          checked={enabledTeamMembers.includes(member.name)}
-                          onCheckedChange={() => {
-                            setEnabledTeamMembers(
-                              enabledTeamMembers.includes(member.name)
-                                ? enabledTeamMembers.filter(
-                                    (name) => name !== member.name,
-                                  )
-                                : [...enabledTeamMembers, member.name],
-                            );
-                          }}
-                        >
-                          {member.name.charAt(0).toUpperCase() +
-                            member.name.slice(1)}
-                          {member.is_optional && (
-                            <span className="text-xs text-gray-400">
-                              (Optional)
-                            </span>
-                          )}
-                        </DropdownMenuCheckboxItem>
-                      </TooltipTrigger>
-                      <TooltipContent side="right">
-                        <p>{member.desc}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </TooltipTrigger>
+                </TooltipTrigger>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>Agents</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {teamMembers.map((member) => (
+                  <Tooltip key={member.name}>
+                    <TooltipTrigger asChild>
+                      <DropdownMenuCheckboxItem
+                        key={member.name}
+                        disabled={!member.is_optional}
+                        checked={enabledTeamMembers.includes(member.name)}
+                        onCheckedChange={() => {
+                          setEnabledTeamMembers(
+                            enabledTeamMembers.includes(member.name)
+                              ? enabledTeamMembers.filter(
+                                  (name) => name !== member.name,
+                                )
+                              : [...enabledTeamMembers, member.name],
+                          );
+                        }}
+                      >
+                        {member.name.charAt(0).toUpperCase() +
+                          member.name.slice(1)}
+                        {member.is_optional && (
+                          <span className="text-xs text-gray-400">
+                            (Optional)
+                          </span>
+                        )}
+                      </DropdownMenuCheckboxItem>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                      <p>{member.desc}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
             <TooltipContent>
               <p>Enable or disable agents</p>
             </TooltipContent>
