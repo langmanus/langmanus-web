@@ -73,8 +73,16 @@ export default function HomePage() {
                   👋 Hello, there!
                 </h3>
                 <div className="px-4 text-center text-lg text-gray-400">
-                  LangManus, built on cutting-edge language models, helps you
-                  search on web, browse information, and handle complex tasks.
+                  <a
+                    href="https://github.com/langmanus/langmanus"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline hover:text-blue-600"
+                  >
+                    LangManus
+                  </a>
+                  , built on cutting-edge language models, helps you search on
+                  web, browse information, and handle complex tasks.
                 </div>
               </div>
             )}
