@@ -1,4 +1,8 @@
-import { ArrowUpOutlined, GlobalOutlined } from "@ant-design/icons";
+import {
+  ArrowUpOutlined,
+  GlobalOutlined,
+  RobotOutlined,
+} from "@ant-design/icons";
 import { Headset } from "lucide-react";
 import { type KeyboardEvent, useCallback, useEffect, useState } from "react";
 
@@ -128,7 +132,7 @@ export function InputBox({
                     true,
                 })}
               >
-                <Headset className="h-4 w-4" />
+                <RobotOutlined className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
