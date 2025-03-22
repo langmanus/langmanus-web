@@ -119,6 +119,7 @@ export class WorkflowEngine {
         case "end_of_workflow":
           this.workflow.finalState = { messages: event.data.messages };
           this.workflow.isCompleted = true;
+          yield this.workflow;
           return;
         default:
           break;
