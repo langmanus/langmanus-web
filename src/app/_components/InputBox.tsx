@@ -1,8 +1,18 @@
 import { ArrowUpOutlined, GlobalOutlined } from "@ant-design/icons";
+import { Headset } from "lucide-react";
 import { type KeyboardEvent, useCallback, useEffect, useState } from "react";
 
 import { Button } from "~/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 import { Atom } from "~/core/icons";
+import { useStore } from "~/core/store";
 import { cn } from "~/core/utils";
 
 export function InputBox({
@@ -21,27 +31,21 @@ export function InputBox({
   ) => void;
   onCancel?: () => void;
 }) {
+  const teamMembers = useStore((state) => state.teamMembers);
+  const enabledTeamMembers = useStore((state) => state.enabledTeamMembers);
+
   const [message, setMessage] = useState("");
   const [deepThinkingMode, setDeepThinkMode] = useState(false);
   const [searchBeforePlanning, setSearchBeforePlanning] = useState(false);
   const [imeStatus, setImeStatus] = useState<"active" | "inactive">("inactive");
+
   const saveConfig = useCallback(() => {
     localStorage.setItem(
       "langmanus.config.inputbox",
       JSON.stringify({ deepThinkingMode, searchBeforePlanning }),
     );
   }, [deepThinkingMode, searchBeforePlanning]);
-  useEffect(() => {
-    const config = localStorage.getItem("langmanus.config.inputbox");
-    if (config) {
-      const { deepThinkingMode, searchBeforePlanning } = JSON.parse(config);
-      setDeepThinkMode(deepThinkingMode);
-      setSearchBeforePlanning(searchBeforePlanning);
-    }
-  }, []);
-  useEffect(() => {
-    saveConfig();
-  }, [deepThinkingMode, searchBeforePlanning, saveConfig]);
+
   const handleSendMessage = useCallback(() => {
     if (responding) {
       onCancel?.();
@@ -62,6 +66,7 @@ export function InputBox({
     deepThinkingMode,
     searchBeforePlanning,
   ]);
+
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLTextAreaElement>) => {
       if (responding) {
@@ -80,6 +85,20 @@ export function InputBox({
     },
     [responding, imeStatus, handleSendMessage],
   );
+
+  useEffect(() => {
+    const config = localStorage.getItem("langmanus.config.inputbox");
+    if (config) {
+      const { deepThinkingMode, searchBeforePlanning } = JSON.parse(config);
+      setDeepThinkMode(deepThinkingMode);
+      setSearchBeforePlanning(searchBeforePlanning);
+    }
+  }, []);
+
+  useEffect(() => {
+    saveConfig();
+  }, [deepThinkingMode, searchBeforePlanning, saveConfig]);
+
   return (
     <div className={cn(className)}>
       <div className="w-full">
@@ -100,6 +119,43 @@ export function InputBox({
       </div>
       <div className="flex items-center px-4 py-2">
         <div className="flex grow items-center gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                className={cn("rounded-2xl px-4 text-sm", {
+                  "border-blue-300 bg-blue-100 text-blue-500 hover:bg-blue-200 hover:text-blue-600":
+                    true,
+                })}
+              >
+                <Headset className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Agents</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {teamMembers.map((member) => (
+                <DropdownMenuCheckboxItem
+                  key={member.name}
+                  disabled={!member.is_optional}
+                  checked={enabledTeamMembers.includes(member.name)}
+                  onCheckedChange={() => {
+                    useStore.setState((state) => ({
+                      enabledTeamMembers: enabledTeamMembers.includes(
+                        member.name,
+                      )
+                        ? enabledTeamMembers.filter(
+                            (name) => name !== member.name,
+                          )
+                        : [...state.enabledTeamMembers, member.name],
+                    }));
+                  }}
+                >
+                  {member.name.charAt(0).toUpperCase() + member.name.slice(1)}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Button
             variant="outline"
             className={cn("rounded-2xl px-4 text-sm", {

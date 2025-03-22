@@ -3,12 +3,16 @@ import { env } from "~/env";
 import { type Message } from "../messaging";
 import { fetchStream } from "../sse";
 
-import { type ChatEvent } from "./types";
+import { type TeamMember, type ChatEvent } from "./types";
 
 export function chatStream(
   userMessage: Message,
   state: { messages: { role: string; content: string }[] },
-  params: { deepThinkingMode: boolean; searchBeforePlanning: boolean },
+  params: {
+    deepThinkingMode: boolean;
+    searchBeforePlanning: boolean;
+    teamMembers: string[];
+  },
   options: { abortSignal?: AbortSignal } = {},
 ) {
   return fetchStream<ChatEvent>(
@@ -21,8 +25,24 @@ export function chatStream(
         debug:
           location.search.includes("debug") &&
           !location.search.includes("debug=false"),
+        team_members: params.teamMembers,
       }),
       signal: options.abortSignal,
     },
   );
+}
+
+export async function queryTeamMembers() {
+  const response = await fetch(
+    (env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api") + "/team_members",
+    { method: "GET" },
+  );
+  const { team_members } = (await response.json()) as {
+    team_members: Record<string, TeamMember>;
+  };
+  const allTeamMembers = Object.values(team_members);
+  return [
+    ...allTeamMembers.filter((member) => !member.is_optional),
+    ...allTeamMembers.filter((member) => member.is_optional),
+  ];
 }

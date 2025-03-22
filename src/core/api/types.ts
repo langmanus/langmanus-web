@@ -76,3 +76,9 @@ export type ChatEvent =
   | StartOfLLMEvent
   | EndOfLLMEvent
   | MessageEvent;
+
+export type TeamMember = {
+  name: string;
+  desc: string;
+  is_optional: boolean;
+};

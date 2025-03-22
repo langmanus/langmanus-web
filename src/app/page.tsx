@@ -5,7 +5,7 @@ import { useCallback, useRef } from "react";
 
 import { useAutoScrollToBottom } from "~/components/hooks/useAutoScrollToBottom";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import { sendMessage, useStore } from "~/core/store";
+import { sendMessage, useInitTeamMembers, useStore } from "~/core/store";
 import { cn } from "~/core/utils";
 
 import { AppHeader } from "./_components/AppHeader";
@@ -41,6 +41,7 @@ export default function HomePage() {
     [],
   );
 
+  useInitTeamMembers();
   useAutoScrollToBottom(scrollAreaRef, responding);
 
   return (

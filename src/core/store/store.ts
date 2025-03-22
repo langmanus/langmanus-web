@@ -1,6 +1,12 @@
+import { useEffect } from "react";
 import { create } from "zustand";
 
-import { type ChatEvent, chatStream } from "../api";
+import {
+  type ChatEvent,
+  chatStream,
+  queryTeamMembers,
+  type TeamMember,
+} from "../api";
 import { chatStream as mockChatStream } from "../api/mock";
 import {
   type WorkflowMessage,
@@ -11,18 +17,33 @@ import { clone } from "../utils";
 import { WorkflowEngine } from "../workflow";
 
 export const useStore = create<{
+  teamMembers: TeamMember[];
+  enabledTeamMembers: string[];
   messages: Message[];
   responding: boolean;
   state: {
     messages: { role: string; content: string }[];
   };
 }>(() => ({
+  teamMembers: [],
+  enabledTeamMembers: [],
   messages: [],
   responding: false,
   state: {
     messages: [],
   },
 }));
+
+export function useInitTeamMembers() {
+  useEffect(() => {
+    void queryTeamMembers().then((teamMembers) => {
+      useStore.setState({
+        teamMembers,
+        enabledTeamMembers: teamMembers.map((member) => member.name),
+      });
+    });
+  }, []);
+}
 
 export function addMessage(message: Message) {
   useStore.setState((state) => ({ messages: [...state.messages, message] }));
@@ -62,7 +83,15 @@ export async function sendMessage(
   if (window.location.search.includes("mock")) {
     stream = mockChatStream(message);
   } else {
-    stream = chatStream(message, useStore.getState().state, params, options);
+    stream = chatStream(
+      message,
+      useStore.getState().state,
+      {
+        ...params,
+        teamMembers: useStore.getState().enabledTeamMembers,
+      },
+      options,
+    );
   }
   setResponding(true);
 
