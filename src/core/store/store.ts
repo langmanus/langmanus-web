@@ -9,6 +9,7 @@ import {
 } from "../messaging";
 import { clone } from "../utils";
 import { WorkflowEngine } from "../workflow";
+import { saveWorkflow } from "./workflowStorage";
 
 export const useStore = create<{
   messages: Message[];
@@ -112,6 +113,10 @@ export async function sendMessage(
               content: { workflow: updatedWorkflow },
             });
           }
+          
+          // Always save the workflow to localStorage when it completes or fails
+          saveWorkflow(workflow);
+          
           _setState({
             messages: workflow.finalState?.messages ?? [],
           });

@@ -1,3 +1,4 @@
+import { DownOutlined, SaveOutlined, UpOutlined } from "@ant-design/icons";
 import { parse } from "best-effort-json-parser";
 import { useMemo, useRef, useState } from "react";
 
@@ -16,6 +17,7 @@ import {
   type Workflow,
   type WorkflowStep,
 } from "~/core/workflow";
+import { saveWorkflow } from "~/core/store/workflowStorage";
 
 import { Markdown } from "./Markdown";
 import { ToolCallView } from "./ToolCallView";
@@ -37,9 +39,34 @@ export function WorkflowProgressView({
   }, [workflow]);
 
   useAutoScrollToBottom(mainRef, !workflow.isCompleted);
+  // Function to handle manual saving of workflow
+  const handleSaveWorkflow = () => {
+    saveWorkflow(workflow);
+    // Show a temporary success message
+    const saveButton = document.getElementById('save-workflow-button');
+    if (saveButton) {
+      const originalText = saveButton.innerText;
+      saveButton.innerText = 'Saved!';
+      saveButton.classList.add('bg-green-500');
+      setTimeout(() => {
+        saveButton.innerText = originalText;
+        saveButton.classList.remove('bg-green-500');
+      }, 2000);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4">
+      <div className="flex justify-between items-center mb-2">
+        <h2 className="text-xl font-medium">{workflow.name}</h2>
+        <button
+          id="save-workflow-button"
+          className="flex items-center gap-1 px-3 py-1 rounded-md bg-primary text-white hover:bg-primary/90 transition-colors"
+          onClick={handleSaveWorkflow}
+        >
+          <SaveOutlined /> Save Workflow
+        </button>
+      </div>
       <div className={cn("flex overflow-hidden rounded-2xl border", className)}>
         <aside className="flex w-[220px] shrink-0 flex-col border-r bg-[rgba(0,0,0,0.02)]">
           <div className="shrink-0 px-4 py-4 font-medium">Flow</div>
