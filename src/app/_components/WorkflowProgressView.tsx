@@ -133,6 +133,8 @@ function PlanTaskView({ task }: { task: ThinkingTask }) {
       let jsonString = task.payload.text.trim();
       if (jsonString.startsWith("```json\n")) {
         jsonString = jsonString.substring(7);
+      } else if (jsonString.startsWith("```ts\n")) {
+        jsonString = jsonString.substring(5);
       }
       if (jsonString.endsWith("\n```")) {
         jsonString = jsonString.substring(0, jsonString.length - 3);
