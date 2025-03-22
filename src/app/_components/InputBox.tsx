@@ -129,65 +129,103 @@ export function InputBox({
         <div className="flex grow items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn("rounded-2xl px-4 text-sm", {
-                  "border-blue-300 bg-blue-100 text-blue-500 hover:bg-blue-200 hover:text-blue-600":
-                    true,
-                })}
-              >
-                <RobotOutlined className="h-4 w-4" />
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn("rounded-2xl px-4 text-sm", {
+                      "border-blue-300 bg-blue-100 text-blue-500 hover:bg-blue-200 hover:text-blue-600":
+                        true,
+                    })}
+                  >
+                    <RobotOutlined className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Enable or disable agents</p>
+                </TooltipContent>
+              </Tooltip>
             </DropdownMenuTrigger>
+
             <DropdownMenuContent className="w-56">
               <DropdownMenuLabel>Agents</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {teamMembers.map((member) => (
-                <DropdownMenuCheckboxItem
-                  key={member.name}
-                  disabled={!member.is_optional}
-                  checked={enabledTeamMembers.includes(member.name)}
-                  onCheckedChange={() => {
-                    setEnabledTeamMembers(
-                      enabledTeamMembers.includes(member.name)
-                        ? enabledTeamMembers.filter(
-                            (name) => name !== member.name,
-                          )
-                        : [...enabledTeamMembers, member.name],
-                    );
-                  }}
-                >
-                  {member.name.charAt(0).toUpperCase() + member.name.slice(1)}
-                </DropdownMenuCheckboxItem>
+                <Tooltip key={member.name}>
+                  <TooltipTrigger asChild>
+                    <DropdownMenuCheckboxItem
+                      key={member.name}
+                      disabled={!member.is_optional}
+                      checked={enabledTeamMembers.includes(member.name)}
+                      onCheckedChange={() => {
+                        setEnabledTeamMembers(
+                          enabledTeamMembers.includes(member.name)
+                            ? enabledTeamMembers.filter(
+                                (name) => name !== member.name,
+                              )
+                            : [...enabledTeamMembers, member.name],
+                        );
+                      }}
+                    >
+                      {member.name.charAt(0).toUpperCase() +
+                        member.name.slice(1)}
+                    </DropdownMenuCheckboxItem>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>{member.desc}</p>
+                  </TooltipContent>
+                </Tooltip>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button
-            variant="outline"
-            className={cn("rounded-2xl px-4 text-sm", {
-              "border-blue-300 bg-blue-100 text-blue-500 hover:bg-blue-200 hover:text-blue-600":
-                deepThinkingMode,
-            })}
-            onClick={() => {
-              setDeepThinkMode(!deepThinkingMode);
-            }}
-          >
-            <Atom className="h-4 w-4" />
-            <span>Deep Think</span>
-          </Button>
-          <Button
-            variant="outline"
-            className={cn("rounded-2xl px-4 text-sm", {
-              "border-blue-300 bg-blue-100 text-blue-500 hover:bg-blue-200 hover:text-blue-600":
-                searchBeforePlanning,
-            })}
-            onClick={() => {
-              setSearchBeforePlanning(!searchBeforePlanning);
-            }}
-          >
-            <GlobalOutlined className="h-4 w-4" />
-            <span>Search</span>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                className={cn("rounded-2xl px-4 text-sm", {
+                  "border-blue-300 bg-blue-100 text-blue-500 hover:bg-blue-200 hover:text-blue-600":
+                    deepThinkingMode,
+                })}
+                onClick={() => {
+                  setDeepThinkMode(!deepThinkingMode);
+                }}
+              >
+                <Atom className="h-4 w-4" />
+                <span>Deep Think</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>
+                Deep thinking mode. Think before planning.
+                <br />
+                <br />
+                <span className="text-xs text-gray-300">
+                  This feature may cost more tokens and time.
+                </span>
+              </p>
+            </TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                className={cn("rounded-2xl px-4 text-sm", {
+                  "border-blue-300 bg-blue-100 text-blue-500 hover:bg-blue-200 hover:text-blue-600":
+                    searchBeforePlanning,
+                })}
+                onClick={() => {
+                  setSearchBeforePlanning(!searchBeforePlanning);
+                }}
+              >
+                <GlobalOutlined className="h-4 w-4" />
+                <span>Search</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Search before planning</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <Tooltip>
@@ -211,7 +249,7 @@ export function InputBox({
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>{responding ? "Cancel" : "Send"}</p>
+              <p>{responding ? "Stop" : "Send"}</p>
             </TooltipContent>
           </Tooltip>
         </div>
