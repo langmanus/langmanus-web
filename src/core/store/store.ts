@@ -109,7 +109,7 @@ export async function sendMessage(
           addMessage(textMessage);
           break;
         case "final_session_state":
-          _setState({
+          _setWorkflowFinalState({
             messages: event.data.messages,
           });
           break;
@@ -141,7 +141,7 @@ export async function sendMessage(
               content: { workflow: updatedWorkflow },
             });
           }
-          _setState({
+          _setWorkflowFinalState({
             messages: workflow.finalState?.messages ?? [],
           });
           break;
@@ -168,7 +168,7 @@ export function setResponding(responding: boolean) {
   useStore.setState({ responding });
 }
 
-export function _setState(state: {
+export function _setWorkflowFinalState(state: {
   messages: { role: string; content: string }[];
 }) {
   useStore.setState({ state });
