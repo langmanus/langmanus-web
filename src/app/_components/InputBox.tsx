@@ -3,7 +3,6 @@ import {
   GlobalOutlined,
   RobotOutlined,
 } from "@ant-design/icons";
-import { Headset } from "lucide-react";
 import { type KeyboardEvent, useCallback, useEffect, useState } from "react";
 
 import { Button } from "~/components/ui/button";
