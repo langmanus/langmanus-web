@@ -15,7 +15,25 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
-      <body className="bg-body flex min-h-screen min-w-screen">{children}</body>
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css"
+        />
+      </head>
+      <body className="bg-body flex min-h-screen min-w-screen">
+        <a
+          className="github-fork-ribbon"
+          href="https://github.com/langmanus/langmanus"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-ribbon="⭐ Star me on GitHub"
+          title="Star me on GitHub"
+        >
+          Star me on GitHub
+        </a>
+        {children}
+      </body>
     </html>
   );
 }
