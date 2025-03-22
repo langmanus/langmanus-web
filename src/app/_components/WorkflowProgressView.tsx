@@ -9,6 +9,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
 import { Atom } from "~/core/icons";
 import { cn } from "~/core/utils";
 import {
@@ -165,27 +170,34 @@ function PlanTaskView({ task }: { task: ThinkingTask }) {
   return (
     <li key={task.id} className="flex flex-col">
       {reason && (
-        <Accordion
-          type="single"
-          collapsible
-          className="mb-2"
-          value={isThinkingCollapsed ? "" : "deep-thought"}
-          onValueChange={(value) => {
-            setIsThinkingCollapsed(value === "");
-          }}
-        >
-          <AccordionItem value="deep-thought" className="border-none">
-            <AccordionTrigger className="flex w-fit flex-none items-center gap-2 rounded-2xl border px-3 py-1 text-sm hover:no-underline [&[data-state=open]>svg]:rotate-180">
-              <Atom className="h-4 w-4" />
-              <span>Deep Thought</span>
-            </AccordionTrigger>
-            <AccordionContent>
-              <Markdown className="border-l-2 pt-2 pl-6 text-sm opacity-70">
-                {reason}
-              </Markdown>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Accordion
+              type="single"
+              collapsible
+              className="mb-2"
+              value={isThinkingCollapsed ? "" : "deep-thought"}
+              onValueChange={(value) => {
+                setIsThinkingCollapsed(value === "");
+              }}
+            >
+              <AccordionItem value="deep-thought" className="border-none">
+                <AccordionTrigger className="flex w-fit flex-none items-center gap-2 rounded-2xl border px-3 py-1 text-sm hover:no-underline [&[data-state=open]>svg]:rotate-180">
+                  <Atom className="h-4 w-4" />
+                  <span>Deep Thought</span>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <Markdown className="border-l-2 pt-2 pl-6 text-sm opacity-70">
+                    {reason}
+                  </Markdown>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </TooltipTrigger>
+          <TooltipContent side="left">
+            <p>{isThinkingCollapsed ? "Expand thought" : "Collapse thought"}</p>
+          </TooltipContent>
+        </Tooltip>
       )}
       <div>
         <Markdown className="pl-6">{markdown ?? ""}</Markdown>
