@@ -36,13 +36,26 @@ export const useStore = create<{
 
 export function useInitTeamMembers() {
   useEffect(() => {
+    const enabledTeamMembers = localStorage.getItem(
+      "langmanus.config.enabledTeamMembers",
+    );
     void queryTeamMembers().then((teamMembers) => {
       useStore.setState({
         teamMembers,
-        enabledTeamMembers: teamMembers.map((member) => member.name),
+        enabledTeamMembers: enabledTeamMembers
+          ? JSON.parse(enabledTeamMembers)
+          : teamMembers.map((member) => member.name),
       });
     });
   }, []);
+}
+
+export function setEnabledTeamMembers(enabledTeamMembers: string[]) {
+  useStore.setState({ enabledTeamMembers });
+  localStorage.setItem(
+    "langmanus.config.enabledTeamMembers",
+    JSON.stringify(enabledTeamMembers),
+  );
 }
 
 export function addMessage(message: Message) {

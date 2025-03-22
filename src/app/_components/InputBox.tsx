@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Atom } from "~/core/icons";
-import { useStore } from "~/core/store";
+import { setEnabledTeamMembers, useStore } from "~/core/store";
 import { cn } from "~/core/utils";
 
 export function InputBox({
@@ -143,15 +143,13 @@ export function InputBox({
                   disabled={!member.is_optional}
                   checked={enabledTeamMembers.includes(member.name)}
                   onCheckedChange={() => {
-                    useStore.setState((state) => ({
-                      enabledTeamMembers: enabledTeamMembers.includes(
-                        member.name,
-                      )
+                    setEnabledTeamMembers(
+                      enabledTeamMembers.includes(member.name)
                         ? enabledTeamMembers.filter(
                             (name) => name !== member.name,
                           )
-                        : [...state.enabledTeamMembers, member.name],
-                    }));
+                        : [...enabledTeamMembers, member.name],
+                    );
                   }}
                 >
                   {member.name.charAt(0).toUpperCase() + member.name.slice(1)}
