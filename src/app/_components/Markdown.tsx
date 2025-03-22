@@ -6,11 +6,15 @@ import ReactMarkdown, {
 import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
+import "katex/dist/katex.min.css";
 
 import { Button } from "~/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
 import { cn } from "~/core/utils";
-
-import "katex/dist/katex.min.css";
 
 export function Markdown({
   className,
@@ -54,29 +58,35 @@ export function Markdown({
 function CopyButton({ content }: { content: string }) {
   const [copied, setCopied] = useState(false);
   return (
-    <Button
-      variant="outline"
-      size="sm"
-      className="rounded-full"
-      onClick={async () => {
-        try {
-          await navigator.clipboard.writeText(content);
-          setCopied(true);
-          setTimeout(() => {
-            setCopied(false);
-          }, 1000);
-        } catch (error) {
-          console.error(error);
-        }
-      }}
-    >
-      {copied ? (
-        <CheckOutlined className="h-4 w-4" />
-      ) : (
-        <CopyOutlined className="h-4 w-4" />
-      )}{" "}
-      {copied ? "Copied" : "Copy"}
-    </Button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          variant="outline"
+          size="sm"
+          className="rounded-full"
+          onClick={async () => {
+            try {
+              await navigator.clipboard.writeText(content);
+              setCopied(true);
+              setTimeout(() => {
+                setCopied(false);
+              }, 1000);
+            } catch (error) {
+              console.error(error);
+            }
+          }}
+        >
+          {copied ? (
+            <CheckOutlined className="h-4 w-4" />
+          ) : (
+            <CopyOutlined className="h-4 w-4" />
+          )}{" "}
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Copy</p>
+      </TooltipContent>
+    </Tooltip>
   );
 }
 
