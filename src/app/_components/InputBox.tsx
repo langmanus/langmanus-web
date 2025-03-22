@@ -163,6 +163,11 @@ export function InputBox({
                         >
                           {member.name.charAt(0).toUpperCase() +
                             member.name.slice(1)}
+                          {member.is_optional && (
+                            <span className="text-xs text-gray-400">
+                              (Optional)
+                            </span>
+                          )}
                         </DropdownMenuCheckboxItem>
                       </TooltipTrigger>
                       <TooltipContent side="right">
